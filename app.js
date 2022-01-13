@@ -11,6 +11,7 @@ const morgan = require('morgan');
 app.engine('html', require('ejs').renderFile); // Para que los archivos HTML los interprete como EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); // Para definir la ruta de las vistas
+app.get('/favicon.ico', (req, res) => res.status(204).end()); // Para que no salga el error favicon
 
 // Middlewares
 app.use(morgan('dev'));
