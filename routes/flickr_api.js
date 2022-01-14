@@ -2,8 +2,6 @@ const API_KEY = '21243630aaaa2b4a6f0ad9f4faecb9b3';
 const SECRET = 'c1d63afeb02e2a4d';
 var Flickr = require('flickr-sdk');
 
-
-
 module.exports = function (app, https) {
 
     app.get('/flickr/search/:busqueda', function (req, res)

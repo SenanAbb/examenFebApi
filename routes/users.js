@@ -12,9 +12,9 @@ module.exports = function (app, gestorBD) {
 
     app.post('/users/add', function (req, res) {
         //TODO hacer validador y encriptar la contraseña
+        console.log(req.body);
         gestorBD.insertarItem(req.body, 'usuarios', function (usuario) {
             if (usuario == null) {
-                console.log("WARN: Fallo al insertar un usuario. Email: " + req.body.email)
                 res.send({ Error: { status: 500, data: "Se ha producido un error al insertar el usuario, intentelo de nuevo más tarde" } })
             }
             else {
@@ -47,7 +47,6 @@ module.exports = function (app, gestorBD) {
     })
     
     app.put('/users/edit/:id', function (req, res) {
-        console.log(req.body);
         let criterio = {"_id": gestorBD.mongo.ObjectID(req.params.id)};
         let nuevoUsuario = req.body;
         gestorBD.modificarItem(criterio, nuevoUsuario, 'usuarios', function(result){
@@ -67,6 +66,18 @@ module.exports = function (app, gestorBD) {
                 res.send({ Error: { status: 500, data: "Se ha producido un error al obtener la lista de usuarios, intentelo de nuevo más tarde" } })
             } else {
                 res.send({status: 200, data: {usuarios: usuarios}})
+            }
+        });
+    });
+
+    app.get('/findUserByEmail/:email', function(req, res){
+        let email = req.params.email;
+        let criterio = { "email": email };
+        gestorBD.obtenerItem(criterio, 'usuarios', function(usuario) {
+            if (usuario == null) {
+                res.send({ Error: { status: 500, data: "Se ha producido un error al obtener el usuario, intentelo de nuevo más tarde o con otro email" } })
+            } else {
+                res.send({status: 200, data: {usuarios: usuario}})
             }
         });
     });
