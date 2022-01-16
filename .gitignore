@@ -1,7 +1,2 @@
 /node_modules
-package-lock.json
-.vs/blablacarApi/config/applicationhost.config
-.vs/ProjectSettings.json
-.vs/blablacarApi/v16/.suo
-.vs/slnx.sqlite
-.vs/VSWorkspaceState.json
+/package-lock.json

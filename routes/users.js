@@ -42,6 +42,7 @@ module.exports = function (app, gestorBD) {
                 res.send({ Error: { status: 500, data: "Se ha producido un error inesperado, intentelo de nuevo más tarde" } })
             }
             else {
+                console.log(usuario);
                 res.send({status: 200, data: {usuario: usuario}})            }
         });        
     })

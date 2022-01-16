@@ -4,9 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "node app.js"
-
+    "start": "nodemon src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,8 +20,5 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.14"
-  },
-  "engines": {
-    "node": "16.13.0"
   }
 }

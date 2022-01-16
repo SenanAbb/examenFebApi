@@ -11,7 +11,6 @@ const morgan = require('morgan');
 app.engine('html', require('ejs').renderFile); // Para que los archivos HTML los interprete como EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); // Para definir la ruta de las vistas
-app.get('/favicon.ico', (req, res) => res.status(204).end()); // Para que no salga el error favicon
 
 // Middlewares
 app.use(morgan('dev'));
@@ -30,7 +29,8 @@ require("./routes/travels")(app, gestorBD);
 require("./routes/wheater_api")(app, https);
 require("./routes/incidencias_api")(app, https);
 require("./routes/flickr_api")(app, https);
-
+require("./routes/messages")(app, gestorBD);
+require("./routes/conversations")(app, gestorBD);
 
 //Controlador en caso de 404
 app.get('*',function (req, res,next) {
