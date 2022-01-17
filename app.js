@@ -36,5 +36,4 @@ require("./routes/conversations")(app, gestorBD);
 app.get('*',function (req, res,next) {
     console.log("Error producido: ");
     res.send({ Error: { status: 404, data: "No se ha encontrado la pagina" } })
-    
 })
