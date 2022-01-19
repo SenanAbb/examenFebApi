@@ -132,4 +132,20 @@ module.exports = function (app, gestorBD) {
       }
     });
   });
+
+  app.get("/findUserById/:id", function (req, res) {
+    let criterio = { _id: gestorBD.mongo.ObjectID(req.params.id) };
+    gestorBD.obtenerItem(criterio, "usuarios", function (usuario) {
+      if (usuario == null) {
+        res.send({
+          Error: {
+            status: 500,
+            data: "Se ha producido un error al obtener el usuario, intentelo de nuevo más tarde o con otro email",
+          },
+        });
+      } else {
+        res.send({ status: 200, data: { usuario: usuario } });
+      }
+    });
+  });
 };
