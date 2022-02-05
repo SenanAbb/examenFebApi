@@ -28,7 +28,6 @@ require("./routes/users")(app, gestorBD);  // (app, param1, param2, etc.)
 require("./routes/travels")(app, gestorBD);
 require("./routes/wheater_api")(app, https);
 require("./routes/incidencias_api")(app, https);
-require("./routes/flickr_api")(app, https);
 require("./routes/messages")(app, gestorBD);
 require("./routes/conversations")(app, gestorBD);
 
