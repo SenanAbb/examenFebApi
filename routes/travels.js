@@ -28,7 +28,7 @@ module.exports = function (app, gestorBD) {
         });
       }
     });
-  });
+  };
 
   // Todos los viajes (TODO: Se podrán hacer busquedas sobre ellos)
   app.get("/travels", function (req, res) {
@@ -83,7 +83,7 @@ module.exports = function (app, gestorBD) {
         });
       }
     });
-  });
+  };
 
   // CRUD de viajes
   app.post("/travels", function (req, res) {
