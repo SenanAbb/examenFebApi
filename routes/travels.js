@@ -8,8 +8,13 @@ module.exports = function (app, gestorBD) {
     if (destino == null) destino = "";
 
     let query = {
-      $and: [{ id_pasajeros: req.query.passenger }, { lugar_salida: origen, $options: "i" }, { lugar_llegada: destino, $options: "i" }],
+      $and: [
+        { lugar_salida: { $regex: ".*" + origen + ".*", $options: "i" } },
+        { lugar_llegada: { $regex: ".*" + destino + ".*", $options: "i" } },
+        { id_pasajeros: req.query.passenger }
+      ]
     };
+
 
     let criterio = { _id: gestorBD.mongo.ObjectID(req.query.passenger) };
 
@@ -49,7 +54,10 @@ module.exports = function (app, gestorBD) {
     if (destino == null) destino = "";
 
     let criterio = {
-      $and: [{ lugar_salida: origen, $options: "i" }, { lugar_llegada: destino, $options: "i" }],
+      $and: [
+        { lugar_salida: { $regex: ".*" + origen + ".*", $options: "i" } },
+        { lugar_llegada: { $regex: ".*" + destino + ".*", $options: "i" } }
+      ]
     };
 
     let conductor = req.query.driver;
@@ -84,7 +92,11 @@ module.exports = function (app, gestorBD) {
     if (destino == null) destino = "";
 
     let query = {
-      $and: [{ id_conductor: req.query.driver }, { lugar_salida: origen, $options: "i" }, { lugar_llegada: destino, $options: "i" }],
+      $and: [
+        { lugar_salida: { $regex: ".*" + origen + ".*", $options: "i" } },
+        { lugar_llegada: { $regex: ".*" + destino + ".*", $options: "i" } },
+        { id_conductor: req.query.driver }
+      ]
     };
 
     let criterio = { _id: gestorBD.mongo.ObjectID(req.query.driver) };
