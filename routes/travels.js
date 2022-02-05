@@ -1,7 +1,18 @@
 module.exports = function (app, gestorBD) {
   // Viajes de un pasajero
   function viajesPasajero(req, res) {
+    let origen = req.query.origen;
+    let destino = req.query.destino;
+
+    if (origen == null) origen = "";
+    if (destino == null) destino = "";
+
+    let query = {
+      $and: [{ id_pasajeros: req.query.passenger }, { lugar_salida: origen, $options: "i" }, { lugar_llegada: destino, $options: "i" }],
+    };
+
     let criterio = { _id: gestorBD.mongo.ObjectID(req.query.passenger) };
+
     gestorBD.obtenerItem(criterio, "usuarios", function (resultUser) {
       if (resultUser == null)
         res.send({
@@ -11,7 +22,6 @@ module.exports = function (app, gestorBD) {
           },
         });
       else {
-        let query = { id_pasajeros: req.query.passenger };
         gestorBD.obtenerItem(query, "viajes", function (resultTravel) {
           if (resultTravel == null)
             res.send({
@@ -32,14 +42,25 @@ module.exports = function (app, gestorBD) {
 
   // Todos los viajes (TODO: Se podrán hacer busquedas sobre ellos)
   app.get("/travels", function (req, res) {
+    let origen = req.query.origen;
+    let destino = req.query.destino;
+
+    if (origen == null) origen = "";
+    if (destino == null) destino = "";
+
+    let criterio = {
+      $and: [{ lugar_salida: origen, $options: "i" }, { lugar_llegada: destino, $options: "i" }],
+    };
+
     let conductor = req.query.driver;
     let pasajero = req.query.passenger;
+
     if (conductor != null) {
       viajesConductor(req, res);
     } else if (pasajero != null) {
       viajesPasajero(req, res);
     } else {
-      gestorBD.obtenerItem({}, "viajes", function (viajes) {
+      gestorBD.obtenerItem(criterio, "viajes", function (viajes) {
         if (viajes == null)
           res.send({
             Error: {
@@ -56,6 +77,16 @@ module.exports = function (app, gestorBD) {
 
   //Viajes con el id de un conductor concreto
   function viajesConductor(req, res) {
+    let origen = req.query.origen;
+    let destino = req.query.destino;
+
+    if (origen == null) origen = "";
+    if (destino == null) destino = "";
+
+    let query = {
+      $and: [{ id_conductor: req.query.driver }, { lugar_salida: origen, $options: "i" }, { lugar_llegada: destino, $options: "i" }],
+    };
+
     let criterio = { _id: gestorBD.mongo.ObjectID(req.query.driver) };
     gestorBD.obtenerItem(criterio, "usuarios", function (resultUser) {
       if (resultUser == null)
@@ -66,7 +97,6 @@ module.exports = function (app, gestorBD) {
           },
         });
       else {
-        let query = { id_conductor: req.query.driver };
         gestorBD.obtenerItem(query, "viajes", function (resultTravel) {
           if (resultTravel == null)
             res.send({
@@ -152,14 +182,11 @@ module.exports = function (app, gestorBD) {
   });
 
   app.get("/travels/search", function (req, res) {
-    let origen = req.query.origen;
-    let destino = req.query.destino;
+    
     let fecha = req.query.fecha;
     let hora = req.query.hora;
 
-    let criterio = {
-      $and: [{ lugar_salida: origen }, { lugar_llegada: destino }],
-    };
+
     gestorBD.obtenerItem(criterio, "viajes", function (result) {
       if (result == null)
         res.send({
