@@ -8,9 +8,9 @@ module.exports = function (app, gestorBD) {
     if (email == null) email = "";
     let criterio = {
       $and: [
-        { nombre: { $regex: ".*" + name + ".*", $options: i } },
-        { apellido: { $regex: ".*" + surname + ".*", $options: i } },
-        { email: { $regex: ".*" + email + ".*", $options: i } }
+        { nombre: { $regex: ".*" + name + ".*", $options: "i" } },
+        { apellido: { $regex: ".*" + surname + ".*", $options: "i" } },
+        { email: { $regex: ".*" + email + ".*", $options: "i" } }
       ]
     };
     gestorBD.obtenerItem(criterio, "usuarios", function (usuarios) {
