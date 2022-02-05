@@ -1,6 +1,19 @@
 module.exports = function (app, gestorBD) {
-  app.get("/", function (req, res) {
-    gestorBD.obtenerItem({}, "usuarios", function (usuarios) {
+  app.get("/users", function (req, res) {
+    let name = req.query.name;
+    let surname = req.query.surname;
+    let email = req.query.email;
+    if (name == null) name = "";
+    if (surname == null) surname = "";
+    if (email == null) email = "";
+    let criterio = {
+      $and: [
+        { nombre: { $regex: ".*" + name + ".*" } },
+        { apellido: { $regex: ".*" + surname + ".*" } },
+        { email: { $regex: ".*" + email + ".*" } }
+      ]
+    };
+    gestorBD.obtenerItem(criterio, "usuarios", function (usuarios) {
       if (usuarios == null) {
         res.send({
           Error: {
@@ -14,7 +27,7 @@ module.exports = function (app, gestorBD) {
     });
   });
 
-  app.post("/users/add", function (req, res) {
+  app.post("/users", function (req, res) {
     //TODO hacer validador y encriptar la contraseña
     gestorBD.insertarItem(req.body, "usuarios", function (usuario) {
       if (usuario == null) {
@@ -33,7 +46,7 @@ module.exports = function (app, gestorBD) {
     });
   });
 
-  app.delete("/users/delete", function (req, res) {
+  app.delete("/users", function (req, res) {
     let criterio = { _id: gestorBD.mongo.ObjectID(req.body.id) };
     gestorBD.eliminarItem(criterio, "usuarios", function (result) {
       if (result == null) {
@@ -52,7 +65,7 @@ module.exports = function (app, gestorBD) {
     });
   });
 
-  app.get("/users/edit/:id", function (req, res) {
+  app.get("/users/:id", function (req, res) {
     let criterio = { _id: gestorBD.mongo.ObjectID(req.params.id) };
     gestorBD.obtenerItem(criterio, "usuarios", function (usuario) {
       if (usuario == null) {
@@ -69,7 +82,7 @@ module.exports = function (app, gestorBD) {
     });
   });
 
-  app.put("/users/edit/:id", function (req, res) {
+  app.put("/users/:id", function (req, res) {
     let criterio = { _id: gestorBD.mongo.ObjectID(req.params.id) };
     let nuevoUsuario = req.body;
     gestorBD.modificarItem(

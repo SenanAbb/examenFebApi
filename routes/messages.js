@@ -2,7 +2,7 @@ module.exports = function (app, gestorBD) {
     
    
 
-    app.get("/", function (req, res) {
+    app.get("/messages", function (req, res) {
         gestorBD.obtenerItem({}, 'mensajes', function (mensajes) {
             if (mensajes == null) {
                 res.send({ Error: { status: 500, data: "Se ha producido un error al obtener la lista de mensajes, intentelo de nuevo más tarde" } })
@@ -12,7 +12,7 @@ module.exports = function (app, gestorBD) {
         });
     });
 
-    app.post('/messages/add', function (req, res) {
+    app.post('/messages', function (req, res) {
         //TODO hacer validador y encriptar la contraseña
         console.log(req.body);
         var cuerpo = req.body;
@@ -30,7 +30,7 @@ module.exports = function (app, gestorBD) {
         });
     });
 
-    app.delete('/messages/delete', function (req, res) {
+    app.delete('/messages', function (req, res) {
         let criterio = {"_id": gestorBD.mongo.ObjectID(req.body.id)};
         gestorBD.eliminarItem(criterio, 'mensajes', function(result){
             if (result==null){
@@ -42,7 +42,7 @@ module.exports = function (app, gestorBD) {
         })
     });
 
-    app.get('/messages/edit/:id', function (req, res) {
+    app.get('/messages/:id', function (req, res) {
         let criterio = {"_id": gestorBD.mongo.ObjectID(req.params.id)};
         gestorBD.obtenerItem(criterio, 'mensajes', function(mensaje){
             if(mensaje==null){
@@ -53,7 +53,7 @@ module.exports = function (app, gestorBD) {
         });        
     })
     
-    app.put('/messages/edit/:id', function (req, res) {
+    app.put('/messages/:id', function (req, res) {
         console.log(req.body);
         let criterio = {"_id": gestorBD.mongo.ObjectID(req.params.id)};
         let nuevoMensaje = req.body;
