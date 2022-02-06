@@ -106,4 +106,59 @@ module.exports = function (app, gestorBD) {
       }
     );
   });
+
+  app.get("/findUser", function (req, res) {
+    let query = req.query.namesurnameuser;
+    let criterio = {
+      $or: [
+        { nombre: { $regex: ".*" + query + ".*" } },
+        { apellido: { $regex: ".*" + query + ".*" } },
+      ],
+    };
+    gestorBD.obtenerItem(criterio, "usuarios", function (usuarios) {
+      if (usuarios == null) {
+        res.send({
+          Error: {
+            status: 500,
+            data: "Se ha producido un error al obtener la lista de usuarios, intentelo de nuevo más tarde",
+          },
+        });
+      } else {
+        res.send({ status: 200, data: { usuarios: usuarios } });
+      }
+    });
+  });
+
+  app.get("/findUserByEmail/:email", function (req, res) {
+    let email = req.params.email;
+    let criterio = { email: email };
+    gestorBD.obtenerItem(criterio, "usuarios", function (usuario) {
+      if (usuario == null) {
+        res.send({
+          Error: {
+            status: 500,
+            data: "Se ha producido un error al obtener el usuario, intentelo de nuevo más tarde o con otro email",
+          },
+        });
+      } else {
+        res.send({ status: 200, data: { usuarios: usuario } });
+      }
+    });
+  });
+
+  app.get("/findUserById/:id", function (req, res) {
+    let criterio = { _id: gestorBD.mongo.ObjectID(req.params.id) };
+    gestorBD.obtenerItem(criterio, "usuarios", function (usuario) {
+      if (usuario == null) {
+        res.send({
+          Error: {
+            status: 500,
+            data: "Se ha producido un error al obtener el usuario, intentelo de nuevo más tarde o con otro email",
+          },
+        });
+      } else {
+        res.send({ status: 200, data: { usuario: usuario } });
+      }
+    });
+  });
 };
