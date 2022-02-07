@@ -2,7 +2,7 @@ const { query } = require("express");
 
 module.exports = function (app, gestorBD) {
 
-    app.get('/conversacion', function (req, res) {
+    app.get('/conversations', function (req, res) {
 
         let criterio = { $and: [{ "participantes": req.query.id1 }, { "participantes": req.query.id2 }] };
 
@@ -32,7 +32,7 @@ module.exports = function (app, gestorBD) {
         })
     })
 
-    app.get('/conversaciones/:id', function (req, res) {
+    app.get('/conversations/:id', function (req, res) {
         let criterio = { "participantes": req.params.id };
         gestorBD.obtenerItem(criterio, 'conversaciones', function (resultConversation) {
             if (resultConversation == null)
@@ -72,7 +72,7 @@ module.exports = function (app, gestorBD) {
         })
     })
 
-    app.get("/", function (req, res) {
+    app.get("/conversations", function (req, res) {
         gestorBD.obtenerItem({}, 'conversaciones', function (conversaciones) {
             if (conversaciones == null) {
                 res.send({ Error: { status: 500, data: "Se ha producido un error al obtener la lista de conversaciones, intentelo de nuevo más tarde" } })
@@ -95,7 +95,7 @@ module.exports = function (app, gestorBD) {
         });
     });
 
-    app.delete('conversations/delete', function (req, res) {
+    app.delete('/conversations/delete', function (req, res) {
         let criterio = { "_id": gestorBD.mongo.ObjectID(req.body.id) };
         gestorBD.eliminarItem(criterio, 'conversaciones', function (result) {
             if (result == null) {
