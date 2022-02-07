@@ -192,25 +192,4 @@ module.exports = function (app, gestorBD) {
       }
     });
   });
-
-  app.get("/travels/search", function (req, res) {
-    
-    let fecha = req.query.fecha;
-    let hora = req.query.hora;
-
-
-    gestorBD.obtenerItem(criterio, "viajes", function (result) {
-      if (result == null)
-        res.send({
-          Error: {
-            status: 500,
-            data: "Se ha producido un error al modificar el viaje, intentelo de nuevo más tarde",
-          },
-        });
-      else {
-          console.log(result)
-        res.send({ status: 200, viajes: result });
-      }
-    });
-  });
 };
