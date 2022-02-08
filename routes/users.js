@@ -110,9 +110,42 @@ module.exports = function (app, gestorBD) {
     );
   });
 
-  app.get("/users/verify", (req, res) => {
+  app.get("/users/verify/:email", (req, res) => {
     const token = req.get("Authorization");
     const isVerified = verify(token);
-    res.send({ status: 200, data: { isVerified } });;
+
+    if (!isVerified) {
+      res.send({ status: 403, data: { msg: "Acceso denegado" } });
+    } else {
+      gestorBD.obtenerItem(
+        { email: req.params.email },
+        "usuarios",
+        function (usuario) {
+          if (usuario.length != 0) {
+            res.send({ status: 200, data: { isVerified } });
+          } else {
+            const nuevoUsuario = {
+              email: req.params.email,
+              viajes: [],
+            };
+            gestorBD.insertarItem(nuevoUsuario, "usuarios", function (usuario) {
+              if (usuario == null) {
+                res.send({
+                  Error: {
+                    status: 500,
+                    data: "Se ha producido un error interno",
+                  },
+                });
+              } else {
+                res.send({
+                  status: 200,
+                  data: { isVerified },
+                });
+              }
+            });
+          }
+        }
+      );
+    }
   });
 };
