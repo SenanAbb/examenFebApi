@@ -122,7 +122,7 @@ module.exports = function (app, gestorBD) {
         "usuarios",
         function (usuario) {
           if (usuario.length != 0) {
-            res.send({ status: 200, data: { isVerified } });
+            res.send({ status: 200, data: { isVerified, usuario } });
           } else {
             const nuevoUsuario = {
               email: req.params.email,
@@ -139,7 +139,7 @@ module.exports = function (app, gestorBD) {
               } else {
                 res.send({
                   status: 200,
-                  data: { isVerified },
+                  data: { isVerified, usuario },
                 });
               }
             });
